@@ -1,6 +1,11 @@
 package de.dbuss.wls_client;
 
 
+import javafx.application.Application;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Scene;
+import javafx.stage.Stage;
+
 import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NamingEnumeration;
@@ -10,132 +15,13 @@ import javax.sql.DataSource;
 import java.sql.*;
 import java.util.Hashtable;
 
-public class HelloClient {
+public class HelloClient extends Application {
 
     public static void main(String[] args) {
 
-   //     System.setProperty("java.rmi.server.hostname", "LAP6.fritz.box");
-        //     System.setProperty("weblogic.rmi.extensions.server.Hostname", "LAP6.fritz.box");
-        //     System.setProperty("weblogic.debug.DebugJNDI", "true");
-        //System.setProperty("weblogic.debug.DebugJNDIResolution", "true");
-        //System.setProperty("weblogic.StdoutDebugEnabled", "true");
-
-         String url = "t3://LAP6.fritz.box:7001";  // ✅ Deine IP + Port
-        //String url = "t3://37.120.190.179:7001";  // ✅ Deine IP + Port
-        String username = "admin";             // Benutzername
-        String password = "7x24!admin4me";             // Passwort
-
-        Hashtable<String, String> env = new Hashtable<>();
-        env.put(Context.INITIAL_CONTEXT_FACTORY, "weblogic.jndi.WLInitialContextFactory");
-        env.put(Context.PROVIDER_URL, url);
-        env.put(Context.SECURITY_PRINCIPAL, username);
-        env.put(Context.SECURITY_CREDENTIALS, password);
-
-        String jndiName = "jdbc/ekpDataSource";
-        try {
-            // 1. JNDI-Context aufbauen
-            Context ctx = new InitialContext(env);
-
-            // 2. DataSource per JNDI holen
-            //DataSource ds = (DataSource) ctx.lookup(jndiName);
-
-            DataSource ds = (DataSource) ctx.lookup("jdbc/ekpDataSource");
-            System.out.println("✅ DataSource gefunden: " + jndiName);
-
-            // 3. Verbindung holen und Abfrage ausführen
-            try (
-
-//                    Connection conn = ds.getConnection();
-                    Connection conn = ds.getConnection(); // Dieser Aufruf "arbeitet" serverseitig
-
-                 PreparedStatement stmt = conn.prepareStatement("select * from ekp.users");
-                 ResultSet rs = stmt.executeQuery()) {
-
-                System.out.println("📄 Ergebnisse:");
-
-                ResultSetMetaData meta = rs.getMetaData();
-                int colCount = meta.getColumnCount();
-
-                while (rs.next()) {
-                    for (int i = 1; i <= colCount; i++) {
-                        System.out.print(rs.getString(i));
-                        if (i < colCount) System.out.print(" | ");
-                    }
-                    System.out.println();
-                }
-
-            } catch (SQLException e) {
-                System.out.println("❌ SQL-Fehler: " + e.getMessage());
-                e.printStackTrace();
-            }
-
-            ctx.close();
-
-        } catch (Exception e) {
-            System.out.println("❌ Fehler beim Zugriff auf die DataSource: " + e.getMessage());
-            e.printStackTrace();
-        }
+        launch(args); //ruft die start-Methode auf
 
 
-        /*
-
-        try {
-            Context ctx = new InitialContext(env);
-            String jndiName = "jdbc/ekpDataSource";
-            System.out.println("🔍 Suche nach DataSource: " + jndiName);
-
-            Object obj = ctx.lookup(jndiName);
-
-            if (obj instanceof DataSource) {
-                System.out.println("✅ DataSource gefunden: " + jndiName + " → " + obj.getClass().getName());
-            } else {
-                System.out.println("⚠️  Objekt gefunden, aber kein DataSource: " + obj.getClass().getName());
-            }
-
-            ctx.close();
-        } catch (NamingException e) {
-            System.out.println("❌ DataSource nicht gefunden: " + e.getMessage());
-            e.printStackTrace();
-        }
-
-
-
-         */
-
-        /*
-
-        try {
-            Context ctx = new InitialContext(env);
-            System.out.println("📦 Durchsuche JNDI nach DataSources:");
-            //listJndi(ctx, "ekpDataSource", "");
-            listJndi(ctx,"","");
-            ctx.close();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-         */
-
-/*
-        try {
-            System.out.println("🟡 Versuche Verbindung zu WebLogic via " + url);
-            Context ctx = new InitialContext(env);
-
-            // JNDI-Einträge im Root-Kontext ausgeben
-            System.out.println("🟢 Verbindung erfolgreich. JNDI-Einträge:");
-            NamingEnumeration<NameClassPair> list = ctx.list("");
-            while (list.hasMore()) {
-                NameClassPair entry = list.next();
-                System.out.println(" - " + entry.getName());
-            }
-
-            ctx.close();
-        } catch (NamingException e) {
-            System.out.println("🔴 Fehler beim Verbindungsaufbau: " + e.getMessage());
-            e.printStackTrace();
-        }
-
- */
     }
 
     private static void listJndi(Context ctx, String baseName, String indent) {
@@ -169,6 +55,17 @@ public class HelloClient {
             System.out.println(indent + "⚠️  Fehler bei Zugriff auf Kontext '" + baseName + "': " + e.getClass().getSimpleName() + ": " + e.getMessage());
         }
     }
+
+
+    @Override
+    public void start(Stage primaryStage) throws Exception {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/de/dbuss/wls_client/TableView.fxml"));
+        Scene scene = new Scene(loader.load(),650,450);
+        primaryStage.setScene(scene);
+        primaryStage.setTitle("eKP Admin App Login");
+        primaryStage.show();
+    }
+
 
 
 

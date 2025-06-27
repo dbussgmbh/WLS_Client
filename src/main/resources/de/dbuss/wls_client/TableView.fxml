@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane xmlns:fx="http://javafx.com/fxml" fx:controller="de.dbuss.wls_client.TableViewController">
+    <children>
+        <TableView fx:id="tableView" layoutX="10" layoutY="10" prefHeight="300" prefWidth="400">
+            <columns>
+                <TableColumn fx:id="idColumn" text="Name" prefWidth="150"/>
+                <TableColumn fx:id="nameColumn" text="Email" prefWidth="250"/>
+            </columns>
+        </TableView>
+    </children>
+</AnchorPane>
