@@ -33,7 +33,7 @@ public class TableViewController implements Initializable {
       //  String url = "t3://LAP6.fritz.box:7001";  // ✅ Deine IP + Port
         String url = "t3://37.120.190.179:7001";  // ✅ Deine IP + Port
         String username = "admin";             // Benutzername
-        String password = "7x24!admin4me";             // Passwort
+        String password = "xxx";             // Passwort
 
         Hashtable<String, String> env = new Hashtable<>();
         env.put(Context.INITIAL_CONTEXT_FACTORY, "weblogic.jndi.WLInitialContextFactory");
