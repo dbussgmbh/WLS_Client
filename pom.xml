@@ -43,7 +43,7 @@
             <groupId>weblogic</groupId>
             <artifactId>wlclient</artifactId>
             <version>12</version>
-            <scope>provided</scope>
+
         </dependency>
 
     </dependencies>

@@ -30,10 +30,16 @@ public class TableViewController implements Initializable {
     private ObservableList<User> loadUsersFromWebLogic(){
 
         ObservableList<User> data = FXCollections.observableArrayList();
+
+        String username = ConfigLoader.get("weblogic.username");
+        String password = ConfigLoader.get("weblogic.password");
+        String url = ConfigLoader.get("weblogic.url");
+        String jndiName = ConfigLoader.get("weblogic.jndiName");
+
       //  String url = "t3://LAP6.fritz.box:7001";  // ✅ Deine IP + Port
-        String url = "t3://37.120.190.179:7001";  // ✅ Deine IP + Port
-        String username = "admin";             // Benutzername
-        String password = "xxx";             // Passwort
+      //  String url = "t3://37.120.190.179:7001";  // ✅ Deine IP + Port
+      //  String username = "admin";             // Benutzername
+      //  String password = "7x24!admin4me";             // Passwort
 
         Hashtable<String, String> env = new Hashtable<>();
         env.put(Context.INITIAL_CONTEXT_FACTORY, "weblogic.jndi.WLInitialContextFactory");
@@ -41,7 +47,7 @@ public class TableViewController implements Initializable {
         env.put(Context.SECURITY_PRINCIPAL, username);
         env.put(Context.SECURITY_CREDENTIALS, password);
 
-        String jndiName = "jdbc/ekpDataSource";
+        //String jndiName = "jdbc/ekpDataSource";
         try {
             // 1. JNDI-Context aufbauen
             Context ctx = new InitialContext(env);
